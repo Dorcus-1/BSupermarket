@@ -1,4 +1,4 @@
-package ne.rest.EDS.Model;
+package ne.oop.bsupermat.Model;
 
 public class Role {
 }
