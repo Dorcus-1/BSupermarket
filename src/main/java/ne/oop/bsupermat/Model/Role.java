@@ -6,11 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -19,9 +18,12 @@ import java.util.List;
 @NoArgsConstructor
 public class Role {
     @Id
-    private long id;
-    private String rolename;
-    @OneToMany
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
+    private String roleName;
+
     @JsonIgnore
-    private List<User> users;
+    @ManyToMany
+    @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private List<User> users = new ArrayList<>();
 }
