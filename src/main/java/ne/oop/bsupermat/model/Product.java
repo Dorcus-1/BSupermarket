@@ -1,4 +1,4 @@
-package ne.oop.bsupermat.Model;
+package ne.oop.bsupermat.model;
 
 import lombok.*;
 

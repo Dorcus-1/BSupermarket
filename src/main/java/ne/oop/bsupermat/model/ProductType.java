@@ -1,4 +1,4 @@
-package ne.oop.bsupermat.Model;
+package ne.oop.bsupermat.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -15,18 +15,12 @@ import java.util.UUID;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Quantity {
+public class ProductType {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-    @ManyToOne
-    private Product product;
-
-
-    private int quantity;
-
-    @ManyToMany
-    @JoinTable(name = "cart_quantities", joinColumns = @JoinColumn(name = "cart_id"),inverseJoinColumns = @JoinColumn(name = "quantity_id"))
+    private String typename;
+    @OneToMany
     @JsonIgnore
-     private List<Cart> carts;
+    private List<Product> products;
 }
