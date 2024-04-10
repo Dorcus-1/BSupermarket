@@ -1,10 +1,9 @@
 package ne.oop.bsupermat.repositories;
 
-import ne.oop.bsupermat.model.Cart;
+import ne.oop.bsupermat.model.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.UUID;
 
-public interface CartRepository extends JpaRepository<Cart, UUID> {
-
+public interface RoleRepository extends JpaRepository<Role, UUID> {
 }
