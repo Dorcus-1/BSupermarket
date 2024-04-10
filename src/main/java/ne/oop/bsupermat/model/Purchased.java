@@ -1,14 +1,12 @@
-package ne.oop.bsupermat.Model;
+package ne.oop.bsupermat.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -17,7 +15,8 @@ import javax.persistence.OneToOne;
 @NoArgsConstructor
 public class Purchased {
     @Id
-    private long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
     @OneToOne
     private Quantity quantity;
     @ManyToOne

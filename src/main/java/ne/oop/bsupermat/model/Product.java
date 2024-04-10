@@ -1,12 +1,10 @@
-package ne.oop.bsupermat.Model;
+package ne.oop.bsupermat.model;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.util.Date;
+import java.util.UUID;
 
 @Entity
 @Getter
@@ -16,7 +14,8 @@ import java.util.Date;
 
 public class Product {
     @Id
-    private long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private UUID id;
     private String productName;
     @ManyToOne
     private ProductType productType;
