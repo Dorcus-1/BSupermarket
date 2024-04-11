@@ -25,4 +25,7 @@ public class Cart {
     @JoinTable(name = "cart_quantities", joinColumns = @JoinColumn(name = "quantity_id"),inverseJoinColumns = @JoinColumn(name = "cart_id"))
     @JsonIgnore
     private List<Quantity> quantities;
+    public Cart(User user){
+        this.user = user;
+    }
 }
