@@ -7,6 +7,7 @@ import ne.oop.bsupermat.model.ProductType;
 import ne.oop.bsupermat.repositories.CartRepository;
 import ne.oop.bsupermat.repositories.ProductTypeRepository;
 import ne.oop.bsupermat.services.ProductTypeService;
+import ne.oop.bsupermat.utils.ExceptionUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +19,12 @@ public class ProductTypeServiceImpl implements ProductTypeService{
 
     @Override
     public List<ProductType> getAllProductTypes() {
-        return null;
+        try {
+            return productTypeRepository.findAll();
+        }catch (Exception e){
+            ExceptionUtils.handleServiceExceptions(e);
+            return null;
+        }
     }
 
     @Override
@@ -31,6 +37,7 @@ public class ProductTypeServiceImpl implements ProductTypeService{
         try{
            ProductType productType= new ProductType();
            productType.setTypename(createProductTypeDTO.getProductTypeName());
+            System.out.println(createProductTypeDTO.getProductTypeName());
 
            return productTypeRepository.save(productType);
         }

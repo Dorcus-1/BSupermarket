@@ -8,8 +8,10 @@ import ne.oop.bsupermat.model.ProductType;
 import ne.oop.bsupermat.repositories.ProductRepository;
 import ne.oop.bsupermat.repositories.ProductTypeRepository;
 import ne.oop.bsupermat.services.ProductService;
+import ne.oop.bsupermat.utils.ExceptionUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -20,7 +22,12 @@ public class ProductServiceImpl implements ProductService {
     private final ProductTypeRepository productTypeRepository;
     @Override
     public List<Product> getAllProducts() {
-        return null;
+        try{
+            return productRepository.findAll();
+        }catch (Exception e){
+            ExceptionUtils.handleServiceExceptions(e);
+            return null;
+        }
     }
     @Override
     public Product getProductById(String id) {
@@ -29,21 +36,20 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product saveProduct(CreateProductDTO createProductDTO) {
         try{
+            Date date=new Date();
             ProductType productType= productTypeRepository.findById(createProductDTO.getProductType()).orElseThrow(()->new  NotFoundException("Product type not found"));
             Product product=new Product();
             product.setProductName(createProductDTO.getProductName());
             product.setPrice(createProductDTO.getPrice());
-            product.setImage(createProductDTO.getImage());
-            product.setDate(createProductDTO.getDate());
+            product.setDate(date);
             product.setCode(createProductDTO.getCode());
             product.setProductType(productType);
              return productRepository.save(product);
 
         }catch (Exception e){
-            e.printStackTrace();
+            ExceptionUtils.handleServiceExceptions(e);
+            return null;
         }
-
-        return null;
     }
 
     @Override

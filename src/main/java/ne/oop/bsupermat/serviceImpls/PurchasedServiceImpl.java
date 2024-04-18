@@ -10,6 +10,7 @@ import ne.oop.bsupermat.repositories.PurchasedRepository;
 import ne.oop.bsupermat.repositories.QuantityRepository;
 import ne.oop.bsupermat.repositories.UserRepository;
 import ne.oop.bsupermat.services.PurchasedService;
+import ne.oop.bsupermat.utils.ExceptionUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,7 +24,12 @@ public class PurchasedServiceImpl implements PurchasedService {
     private final PurchasedRepository purchasedRepository;
     @Override
     public List<Purchased> getAllPurchased() {
-        return null;
+        try{
+            return purchasedRepository.findAll();
+        }catch (Exception e){
+            ExceptionUtils.handleServiceExceptions(e);
+            return null;
+        }
     }
 
     @Override

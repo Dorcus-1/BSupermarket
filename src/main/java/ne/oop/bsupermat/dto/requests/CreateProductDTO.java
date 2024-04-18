@@ -13,8 +13,6 @@ import java.util.UUID;
 public class CreateProductDTO {
     private String productName;
     private int price;
-    private Date date;
-    private String image;
     private String code;
     private UUID productType;
 }

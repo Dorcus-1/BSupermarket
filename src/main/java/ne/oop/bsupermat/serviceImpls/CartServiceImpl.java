@@ -2,6 +2,7 @@ package ne.oop.bsupermat.serviceImpls;
 
 import lombok.RequiredArgsConstructor;
 import ne.oop.bsupermat.dto.requests.CreateCartDTO;
+import ne.oop.bsupermat.exceptions.NotFoundException;
 import ne.oop.bsupermat.model.Cart;
 import ne.oop.bsupermat.model.User;
 import ne.oop.bsupermat.repositories.CartRepository;
@@ -35,7 +36,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public Cart saveCart(CreateCartDTO createCartDTO) {
         try{
-            User user= userRepository.findById(createCartDTO.getUser()).get();
+            User user= userRepository.findById(createCartDTO.getUser()).orElseThrow(()->new NotFoundException("No user found"));
             Cart cart= new Cart(user);
             return cartRepository.save(cart);
         } catch (Exception e) {
