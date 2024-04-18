@@ -9,6 +9,7 @@ import ne.oop.bsupermat.model.Quantity;
 import ne.oop.bsupermat.repositories.ProductRepository;
 import ne.oop.bsupermat.repositories.QuantityRepository;
 import ne.oop.bsupermat.services.QuantityService;
+import ne.oop.bsupermat.utils.ExceptionUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,7 +22,12 @@ public class QuantityServiceImpl implements QuantityService {
     private final ProductRepository productRepository;
     @Override
     public List<Quantity> getAllQuantities() {
-        return null;
+        try{
+            return quantityRepository.findAll();
+        }catch (Exception e){
+            ExceptionUtils.handleServiceExceptions(e);
+            return null;
+        }
     }
 
     @Override

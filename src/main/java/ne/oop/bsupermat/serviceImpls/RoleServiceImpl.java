@@ -5,6 +5,7 @@ import ne.oop.bsupermat.dto.requests.CreateRoleDTO;
 import ne.oop.bsupermat.model.Role;
 import ne.oop.bsupermat.repositories.RoleRepository;
 import ne.oop.bsupermat.services.RoleService;
+import ne.oop.bsupermat.utils.ExceptionUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +18,12 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public List<Role> getAllRoles() {
-        return null;
+        try{
+            return roleRepository.findAll();
+        }catch (Exception e){
+            ExceptionUtils.handleServiceExceptions(e);
+            return null;
+        }
     }
 
     @Override
