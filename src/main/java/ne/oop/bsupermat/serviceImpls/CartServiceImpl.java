@@ -7,6 +7,7 @@ import ne.oop.bsupermat.model.User;
 import ne.oop.bsupermat.repositories.CartRepository;
 import ne.oop.bsupermat.repositories.UserRepository;
 import ne.oop.bsupermat.services.CartService;
+import ne.oop.bsupermat.utils.ExceptionUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +19,12 @@ public class CartServiceImpl implements CartService {
     private final UserRepository userRepository;
     @Override
     public List<Cart> getAllCarts() {
-        return null;
+        try {
+            return cartRepository.findAll();
+        } catch (Exception e) {
+            ExceptionUtils.handleServiceExceptions(e);
+            return null;
+        }
     }
 
     @Override
@@ -33,10 +39,9 @@ public class CartServiceImpl implements CartService {
             Cart cart= new Cart(user);
             return cartRepository.save(cart);
         } catch (Exception e) {
-            e.printStackTrace();
+            ExceptionUtils.handleServiceExceptions(e);
+            return null;
         }
-
-        return null;
     }
 
     @Override
