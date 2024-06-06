@@ -26,4 +26,8 @@ public class Role {
     @ManyToMany
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<User> users = new ArrayList<>();
+
+    public Role(String roleName){
+        this.roleName=roleName;
+    }
 }

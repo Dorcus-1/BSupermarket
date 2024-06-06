@@ -1,52 +1,85 @@
 package ne.oop.bsupermat.configs;
+import ne.oop.bsupermat.dto.response.CustomAuthError;
+import ne.oop.bsupermat.security.jwt.JwtAuthFilter;
+import ne.oop.bsupermat.serviceImpls.UserSecurityDetailServiceImpl;
+import org.springframework.web.cors.CorsConfiguration;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-
-
+    private final JwtAuthFilter jwtAuthFilter;
+    private final UserSecurityDetailServiceImpl userSecurityDetailsService;
+    private final CustomAuthError customAuthError;
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
         http
                 .csrf().disable().cors().configurationSource(request -> {
                     CorsConfiguration cors = new CorsConfiguration();
-                    cors.setAllowCredentials(true);
-                    cors.addAllowedOrigin("http://localhost:3001");
-                    cors.addAllowedOrigin("http://localhost:3000");
+                    cors.addAllowedOrigin("*");
                     cors.addAllowedMethod("*");
                     cors.addAllowedHeader("*");
                     return cors;
                 }).and()
                 .exceptionHandling()
+                .authenticationEntryPoint(customAuthError)
                 .and()
                 .authorizeHttpRequests()
+                .antMatchers(HttpMethod.POST,  "/api/v1/**" )
+                .permitAll()
                 .antMatchers(
                         "/v2/api-docs",
                         "/configuration/ui",
                         "/swagger-resources/**",
                         "/configuration/security",
                         "/swagger-ui.html",
-                        "/api/v1/**",
-                        "/webjars/**")
-                .permitAll() // the above are the endpoints to the swagger documentation
-                .anyRequest().authenticated()
+                        "/webjars/**"
+                )
+                .permitAll()
+                .anyRequest().permitAll()
                 .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and();
-        return http.build();
+                .and()
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(jwtAuthFilter , UsernamePasswordAuthenticationFilter.class);
+        return   http.build();
+    }
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        final DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
+        daoAuthenticationProvider.setUserDetailsService(userDetailsService());
+        daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
+        return daoAuthenticationProvider;
     }
 
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception{
+        return config.getAuthenticationManager();
+    }
 
-
-
+    @Bean
+    public UserDetailsService userDetailsService(){
+        return userSecurityDetailsService::loadUserByUsername;
+    }
 }
