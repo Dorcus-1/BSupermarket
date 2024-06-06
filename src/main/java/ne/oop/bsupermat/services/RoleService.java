@@ -1,5 +1,6 @@
 package ne.oop.bsupermat.services;
 
+import ne.oop.bsupermat.dto.requests.AssignRoleDTO;
 import ne.oop.bsupermat.dto.requests.CreateRoleDTO;
 import ne.oop.bsupermat.model.Cart;
 import ne.oop.bsupermat.model.Purchased;
@@ -13,5 +14,6 @@ public interface RoleService {
     Role getRoleById(String id);
     Role saveRole(CreateRoleDTO createRoleDTO);
     void deleteRole(String id);
+    Role assignRoles(AssignRoleDTO assignRoleDTO);
 
 }

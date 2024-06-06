@@ -1,6 +1,7 @@
 package ne.oop.bsupermat.controller;
 
 import lombok.AllArgsConstructor;
+import ne.oop.bsupermat.dto.requests.AssignRoleDTO;
 import ne.oop.bsupermat.dto.requests.CreateQuantityDTO;
 import ne.oop.bsupermat.dto.requests.CreateRoleDTO;
 import ne.oop.bsupermat.payload.ApiResponse;
@@ -31,6 +32,14 @@ public class RoleController {
             return ResponseEntity.ok(new ApiResponse(true,"Role created successfully",roleServiceImpl.saveRole(createRoleDTO)));
         }catch(Exception e){
             return ExceptionUtils.handleControllerExceptions(e);
+        }
+    }
+    @PutMapping("/assign-role")
+    public ResponseEntity<ApiResponse> assignRole(@RequestBody AssignRoleDTO assignRoleDTO){
+        try{
+            return ResponseEntity.ok(new ApiResponse(true,"Users assigned role",roleServiceImpl.assignRoles(assignRoleDTO)));
+        }catch (Exception e){
+            return  ExceptionUtils.handleControllerExceptions(e);
         }
     }
 }
